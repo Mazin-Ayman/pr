@@ -64,11 +64,17 @@
   <div id="coordinates"></div>
 
   <button id="current-location-btn">Use Current Location</button>
+  <button id="cls">clear</button> 
 
   <script>
     const form = document.querySelector('form');
     const coordinatesDiv = document.querySelector('#coordinates');
     const currentLocationBtn = document.querySelector('#current-location-btn');
+    const cls = document.getElementById('cls'); 
+    cls.onclick = () => {
+      const inputs = document.querySelectorAll('form input'); 
+      inputs.forEach(el => el.value = ""); 
+    }
 
     form.addEventListener('submit', function(event) {
       event.preventDefault();
