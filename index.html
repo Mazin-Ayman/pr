@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Coordinates Input</title>
+  <style>
+    #coordinates {
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+  <form>
+    <!-- Longitude input fields -->
+    <fieldset>
+      <legend>Longitude:</legend>
+      <label for="lon-deg">Degrees:</label>
+      <input type="number" id="lon-deg" name="lon-deg" min="-180" max="180" required>
+      <br>
+
+      <label for="lon-min">Minutes:</label>
+      <input type="number" id="lon-min" name="lon-min" min="0" max="59" required>
+      <br>
+
+      <label for="lon-sec">Seconds:</label>
+      <input type="number" id="lon-sec" name="lon-sec" min="0" max="59" required>
+      <br>
+
+      <label for="lon-dir">Direction:</label>
+      <select id="lon-dir" name="lon-dir" required>
+        <option value="E">E</option>
+        <option value="W">W</option>
+      </select>
+    </fieldset>
+    <br>
+
+    <!-- Latitude input fields -->
+    <fieldset>
+      <legend>Latitude:</legend>
+      <label for="lat-deg">Degrees:</label>
+      <input type="number" id="lat-deg" name="lat-deg" min="-90" max="90" required>
+      <br>
+
+      <label for="lat-min">Minutes:</label>
+      <input type="number" id="lat-min" name="lat-min" min="0" max="59" required>
+      <br>
+
+      <label for="lat-sec">Seconds:</label>
+      <input type="number" id="lat-sec" name="lat-sec" min="0" max="59" required>
+      <br>
+
+      <label for="lat-dir">Direction:</label>
+      <select id="lat-dir" name="lat-dir" required>
+        <option value="N">N</option>
+        <option value="S">S</option>
+      </select>
+    </fieldset>
+    <br>
+
+    <input type="submit" value="Submit">
+  </form>
+
+  <div id="coordinates"></div>
+
+  <button id="current-location-btn">Use Current Location</button>
+
+  <script>
+    const form = document.querySelector('form');
+    const coordinatesDiv = document.querySelector('#coordinates');
+    const currentLocationBtn = document.querySelector('#current-location-btn');
+
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const lonDeg = parseFloat(document.querySelector('#lon-deg').value);
+      const lonMin = parseFloat(document.querySelector('#lon-min').value);
+      const lonSec = parseFloat(document.querySelector('#lon-sec').value);
+      const lonDir = document.querySelector('#lon-dir').value;
+
+      const latDeg = parseFloat(document.querySelector('#lat-deg').value);
+      const latMin = parseFloat(document.querySelector('#lat-min').value);
+      const latSec = parseFloat(document.querySelector('#lat-sec').value);
+      const latDir = document.querySelector('#lat-dir').value;
+
+      const lonDecimal = lonDeg + lonMin / 60 + lonSec / 3600;
+      const latDecimal = latDeg + latMin / 60 + latSec / 3600;
+
+      const coordinatesString = `Longitude: ${lonDecimal.toFixed(6)}, Latitude: ${latDecimal.toFixed(6)}`;
+      coordinatesDiv.textContent = coordinatesString;
+
+      const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${latDecimal.toFixed(6)},${lonDecimal.toFixed(6)}`;
+      window.open(googleMapsUrl, '_blank');
+    });
+
+    currentLocationBtn.addEventListener('click', function() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          const latitude = position.coords.latitude;
+          const longitude = position.coords.longitude;
+
+          const latDeg = Math.floor(Math.abs(latitude));
+          const latMin = Math.floor((Math.abs(latitude) - latDeg) * 60);
+          const latSec = Math.floor(((Math.abs(latitude) - latDeg) * 60 - latMin) * 60);
+          const latDir = latitude >= 0 ? 'N' : 'S';
+
+          const lonDeg = Math.floor(Math.abs(longitude));
+          const lonMin = Math.floor((Math.abs(longitude) - lonDeg) * 60);
+          const lonSec = Math.floor(((Math.abs(longitude) - lonDeg) * 60 - lonMin) * 60);
+          const lonDir = longitude >= 0 ? 'E' : 'W';
+
+          document.querySelector('#lon-deg').value = lonDeg;
+          document.querySelector('#lon-min').value = lonMin;
+          document.querySelector('#lon-sec').value = lonSec;
+          document.querySelector('#lon-dir').value = lonDir;
+
+          document.querySelector('#lat-deg').value = latDeg;
+          document.querySelector('#lat-min').value = latMin;
+          document.querySelector('#lat-sec').value = latSec;
+          document.querySelector('#lat-dir').value = latDir;
+
+          const coordinatesString = `Longitude: ${longitude.toFixed(6)}, Latitude: ${latitude.toFixed(6)}`;
+          coordinatesDiv.textContent = coordinatesString;
+        });
+      } else {
+        alert('Geolocation is not supported by your browser.');
+      }
+    });
+  </script>
+</body>
+
+</html>
+<!-- 
+
+
+
+
+
+
+-->
