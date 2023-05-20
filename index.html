@@ -186,6 +186,22 @@ input[type="submit"] {
 
       const coordinatesString = `Longitude: ${lonDecimal.toFixed(6)}, Latitude: ${latDecimal.toFixed(6)}`;
       coordinatesDiv.textContent = coordinatesString;
+      coordinatesDiv.addEventListener('dblclick', function(){
+      navigator.clipboard.writeText(coordinatesString)
+
+        .then(() => {
+
+          alert('Coordinates copied to clipboard!');
+
+        })
+
+        .catch(err => {
+
+          console.error('Failed to copy coordinates to clipboard: ', err);
+
+        });
+
+    });
 
       const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${latDecimal.toFixed(6)},${lonDecimal.toFixed(6)}`;
       window.open(googleMapsUrl, '_blank');
