@@ -86,7 +86,8 @@
     const cls = document.getElementById('cls'); 
     cls.onclick = () => {
       const inputs = document.querySelectorAll('form input'); 
-      inputs.forEach(el => el.value = ""); 
+      inputs.forEach(el => el.value = "");
+      coordinatesString = ""; 
     }
 
     form.addEventListener('submit', function(event) {
