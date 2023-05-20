@@ -187,13 +187,16 @@ input[type="submit"] {
       const coordinatesString = `Longitude: ${lonDecimal.toFixed(6)}, Latitude: ${latDecimal.toFixed(6)}`;
       coordinatesDiv.textContent = coordinatesString;
       coordinatesDiv.addEventListener('dblclick', function(){
-      navigator.clipboard.writeText(coordinatesString)
-        .then(() => {
-          alert('Coordinates copied to clipboard!');
-        })
-        .catch(err => {
-          alert('Failed to copy coordinates to clipboard: ', err);
-        });
+      navigator.permissions.query({name: "clipboard-write"}).then((result) => {
+
+        if (result.state === "granted" || result.state === "prompt") {
+            navigator.clipboard.writeText(`${latDecimal.toFixed(6)}, ${lonDecimal.toFixed(6)}`); 
+
+       /* write to the clipboard now */
+
+       }
+
+       });
     });
 
       const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${latDecimal.toFixed(6)},${lonDecimal.toFixed(6)}`;
