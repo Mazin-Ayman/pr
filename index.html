@@ -83,6 +83,7 @@
     const form = document.querySelector('form');
     const coordinatesDiv = document.querySelector('#coordinates');
     const currentLocationBtn = document.querySelector('#current-location-btn');
+    let coordinatesString; 
     const cls = document.getElementById('cls'); 
     cls.onclick = () => {
       const inputs = document.querySelectorAll('form input'); 
@@ -139,7 +140,7 @@
           document.querySelector('#lat-sec').value = latSec;
           document.querySelector('#lat-dir').value = latDir;
 
-          const coordinatesString = `Longitude: ${longitude.toFixed(6)}, Latitude: ${latitude.toFixed(6)}`;
+          coordinatesString = `Longitude: ${longitude.toFixed(6)}, Latitude: ${latitude.toFixed(6)}`;
           coordinatesDiv.textContent = coordinatesString;
         });
       } else {
