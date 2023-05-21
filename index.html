@@ -1,11 +1,8 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <meta charset="UTF-8">
-
+  <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=Edge">
-
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Where am I | Ayman A.Alaziz ABE.Internal-control-fayoum</title>
   <style>
@@ -13,87 +10,49 @@
       font-weight: bold;
     }
     footer {
-      width: 100%; 
-      height: 15%; 
-      text-align: center; 
+      width: 100%;
+      height: 15%;
+      text-align: center;
     }
     body {
-
-  font-family: Arial, sans-serif;
-
-  margin: 20px;
-
-}
-
-form {
-
-  width: 300px;
-
-  margin: 0 auto;
-
-}
-
-fieldset {
-
-  border: none;
-
-  margin-bottom: 20px;
-
-}
-
-legend {
-
-  font-weight: bold;
-
-  margin-bottom: 10px;
-
-}
-
-label {
-
-  display: inline-block;
-
-  width: 80px;
-
-}
-
-input[type="number"],
-
-select {
-
-  width: 100px;
-
-  padding: 5px;
-
-  border-radius: 3px;
-
-  border: 1px solid #ccc;
-
-}
-
-input[type="submit"] {
-
-  padding: 8px 15px;
-
-  background-color: #4caf50;
-
-  color: #fff;
-
-  border: none;
-
-  border-radius: 3px;
-
-  cursor: pointer;
-
-}
-
-#coordinates {
-
-  font-weight: bold;
-
-  margin-top: 20px;
-
-}
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    form {
+      width: 300px;
+      margin: 0 auto;
+    }
+    fieldset {
+      border: none;
+      margin-bottom: 20px;
+    }
+    legend {
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    label {
+      display: inline-block;
+      width: 80px;
+    }
+    input[type="number"],
+    select {
+      width: 100px;
+      padding: 5px;
+      border-radius: 3px;
+      border: 1px solid #ccc;
+    }
+    input[type="submit"] {
+      padding: 8px 15px;
+      background-color: #4caf50;
+      color: #fff;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    #coordinates {
+      font-weight: bold;
+      margin-top: 20px;
+    }
   </style>
 </head>
 
@@ -145,30 +104,47 @@ input[type="submit"] {
     </fieldset>
     <br>
 
-    <button type="submit" value="Submit">Submit</button> 
+    <button type="submit" value="Submit">Submit</button>
   </form>
-
-  <div id="coordinates"></div>
+  
+  <div class="cordcont">
+    <div id="coordinates"></div>
+    <button id="copy">copy</button>
+  </div>
 
   <button id="current-location-btn">Use Current Location</button>
   <button id="cls">clear</button>
-  <footer> 
-    <p>By Ayman Ahmed Abdelaziz</p> 
-  </footer> 
+  <footer>
+    <p>By Ayman Ahmed Abdelaziz</p>
+  </footer>
 
   <script>
+    const copyContent = async (text) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      console.log('Content copied to clipboard');
+    } catch (err) {
+      console.error('Failed to copy: ', err);
+    }
+  }
+    const copy = document.getElementById('copy');
     const form = document.querySelector('form');
     const coordinatesDiv = document.querySelector('#coordinates');
+    copy.addEventListener('click', () => {
+      copyContent(`${latitude.toFixed(6)}, ${longitude.toFixed(6)}`);
+    })
     const currentLocationBtn = document.querySelector('#current-location-btn');
-    let coordinatesString; 
-    const cls = document.getElementById('cls'); 
+    let coordinatesString;
+    let latitude;
+    let longitude;
+    const cls = document.getElementById('cls');
     cls.onclick = () => {
-      const inputs = document.querySelectorAll('form input'); 
+      const inputs = document.querySelectorAll('form input');
       inputs.forEach(el => el.value = "");
-      coordinatesString = ""; 
+      coordinatesString = "";
     }
 
-    form.addEventListener('submit', function(event) {
+    form.addEventListener('submit', function (event) {
       event.preventDefault();
 
       const lonDeg = parseFloat(document.querySelector('#lon-deg').value);
@@ -186,28 +162,17 @@ input[type="submit"] {
 
       const coordinatesString = `Longitude: ${lonDecimal.toFixed(6)}, Latitude: ${latDecimal.toFixed(6)}`;
       coordinatesDiv.textContent = coordinatesString;
-      coordinatesDiv.addEventListener('dblclick', function(){
-      navigator.permissions.query({name: "clipboard-write"}).then((result) => {
 
-        if (result.state === "granted" || result.state === "prompt") {
-            navigator.clipboard.writeText(`${latDecimal.toFixed(6)}, ${lonDecimal.toFixed(6)}`); 
-
-       /* write to the clipboard now */
-
-       }
-
-       });
-    });
 
       const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${latDecimal.toFixed(6)},${lonDecimal.toFixed(6)}`;
       window.open(googleMapsUrl, '_blank');
     });
 
-    currentLocationBtn.addEventListener('click', function() {
+    currentLocationBtn.addEventListener('click', function () {
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-          const latitude = position.coords.latitude;
-          const longitude = position.coords.longitude;
+        navigator.geolocation.getCurrentPosition(function (position) {
+          latitude = position.coords.latitude;
+          longitude = position.coords.longitude;
 
           const latDeg = Math.floor(Math.abs(latitude));
           const latMin = Math.floor((Math.abs(latitude) - latDeg) * 60);
