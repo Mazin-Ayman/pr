@@ -131,7 +131,8 @@
     const copy = document.getElementById('copy');
     const form = document.querySelector('form');
     const coordinatesDiv = document.querySelector('#coordinates');
-    console.log(coordinatesDiv);
+    let visable = false;
+    visable ? copy.style.display = "block" : copy.style.display = "none";
     
     copy.addEventListener('click', () => {
       copyContent(`${latitude.toFixed(6)}, ${longitude.toFixed(6)}`);
@@ -199,6 +200,7 @@
 
           coordinatesString = `Longitude: ${longitude.toFixed(6)}, Latitude: ${latitude.toFixed(6)}`;
           coordinatesDiv.textContent = coordinatesString;
+          visable = true;
         });
       } else {
         alert('Geolocation is not supported by your browser.');
