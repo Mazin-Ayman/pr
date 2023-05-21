@@ -127,9 +127,11 @@
       console.error('Failed to copy: ', err);
     }
   }
+    
     const copy = document.getElementById('copy');
     const form = document.querySelector('form');
     const coordinatesDiv = document.querySelector('#coordinates');
+    coordinatesDiv.innerText ? copy.style.display = "block" : copy.style.display = "none"
     copy.addEventListener('click', () => {
       copyContent(`${latitude.toFixed(6)}, ${longitude.toFixed(6)}`);
     })
